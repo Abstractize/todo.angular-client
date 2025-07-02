@@ -1,0 +1,23 @@
+# Use the official Node.js LTS image
+FROM node:18
+
+# Set working directory
+WORKDIR /app
+
+# Install Angular CLI globally
+RUN npm install -g @angular/cli
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose the default Angular port
+EXPOSE 4200
+
+# Start the Angular development server
+CMD ["ng", "serve", "--host", "0.0.0.0", "--disable-host-check"]
