@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,20 +10,24 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  email: string = '';
-  password: string = '';
+  currentForm: UntypedFormGroup;
 
-  constructor(private readonly authService: AuthService) { }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly formBuilder: UntypedFormBuilder,
+    private readonly router: Router
+  ) {
+    this.currentForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]]
+    });
+  }
 
   onSubmit() {
-    this.authService.login(this.email, this.password).subscribe({
-      next: (response) => {
-        console.log('Login successful:', response);
-        // Handle successful login, e.g., redirect to dashboard
-      },
+    this.authService.login(this.currentForm?.getRawValue()).subscribe({
+      next: () => this.router.navigate(['/dashboard']),
       error: (error) => {
-        console.error('Login failed:', error);
-        // Handle login error, e.g., show an error message
+        alert(error.error.message || 'Login failed');
       }
     });
   }

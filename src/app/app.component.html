@@ -1,5 +1,6 @@
 <div>
-  <app-header title="{{title}}"/>
-  <router-outlet (activate)="OnActivate()"/>
+  <app-header title="{{title}}" [loggedIn]="(authService.isAuthenticated$ | async) ?? false"
+    (onLogoutClick)="logout()" />
+  <router-outlet (activate)="OnActivate()" />
   <app-footer />
 </div>

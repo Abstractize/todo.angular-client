@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -7,14 +8,12 @@ import { Component, Input } from '@angular/core';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  
-  @Input()
-  public title: string = "";
 
-  public loggedIn: boolean = false;
-  public userName: string = "";
-  public logout() : void
-  {
-    console.log("LogOut");
+  @Input() public title: string = "";
+  @Input() loggedIn: boolean = false;
+  @Output() onLogoutClick: EventEmitter<void> = new EventEmitter<void>();
+
+  public logout(): void {
+    this.onLogoutClick.emit();
   }
 }

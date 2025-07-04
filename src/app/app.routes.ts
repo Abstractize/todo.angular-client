@@ -10,9 +10,9 @@ export const routes: Routes = [
     },
     {
         path: '',
-        pathMatch: 'prefix', 
+        pathMatch: 'prefix',
         loadChildren: () => import('./client/client.module').then(m => m.ClientModule),
-        canActivate: [authGuard] 
+        canActivate: [authGuard]
     },
     {
         path: 'auth',
@@ -20,7 +20,7 @@ export const routes: Routes = [
         loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
     },
     {
-        path: 'admin', 
+        path: 'admin',
         pathMatch: 'prefix',
         loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
         canActivate: [adminGuard]
