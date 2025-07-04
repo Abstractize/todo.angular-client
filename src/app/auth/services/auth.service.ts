@@ -1,15 +1,139 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { catchError, filter, switchMap, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+
 import { AuthResponse } from '../models/auth-response';
+import { LoginRequest } from '../models/login-request';
+import { AuthRepository } from '../repositories/auth.repository';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
+  private readonly accessTokenKey = 'access_token';
+  private readonly refreshTokenKey = 'refresh_token';
 
-  constructor(private readonly httpClient: HttpClient) { }
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  public isAuthenticated$ = this.isAuthenticatedSubject.asObservable().pipe(
+    filter(value => value !== null && value !== undefined)
+  );
 
-  public login(email: string, password: string): Observable<AuthResponse> {
-    const loginRequest = { email, password };
-    return this.httpClient.post<AuthResponse>('/api/auth/login', loginRequest);
+  constructor(
+    private readonly authRepository: AuthRepository,
+    private readonly router: Router
+  ) { }
+
+  // ===== Public Methods =====
+
+  initializeAuth(): Observable<void> {
+    const hasAccess = this.hasValidAccessToken();
+    const hasRefresh = this.getRefreshToken();
+
+    if (hasAccess) {
+      this.isAuthenticatedSubject.next(true);
+      return of(void 0);
+    }
+
+    if (hasRefresh) {
+      return this.refreshToken().pipe(
+        catchError(() => {
+          this.forceLogout();
+          return of(void 0);
+        })
+      );
+    }
+
+    this.forceLogout();
+    return of(void 0);
+  }
+
+  login(request: LoginRequest): Observable<void> {
+    return this.authRepository.post(request).pipe(
+      tap(res => {
+        this.storeTokens(res);
+        this.isAuthenticatedSubject.next(true);
+      }),
+      switchMap(() => of(void 0))
+    );
+  }
+
+  logout(): Observable<void> {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) {
+      this.forceLogout();
+      return of(void 0);
+    }
+
+    return this.authRepository.logout({ refreshToken }).pipe(
+      tap(() => this.forceLogout()),
+      catchError(() => {
+        this.forceLogout();
+        return of(void 0);
+      })
+    );
+  }
+
+  refreshToken(): Observable<void> {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) return throwError(() => new Error('No refresh token found'));
+
+    return this.authRepository.refreshToken({ refreshToken }).pipe(
+      tap(res => {
+        this.storeTokens(res);
+        this.isAuthenticatedSubject.next(true);
+      }),
+      switchMap(() => of(void 0)),
+      catchError(err => {
+        this.forceLogout();
+        return throwError(() => err);
+      })
+    );
+  }
+
+  getAccessToken(): string | null {
+    return localStorage.getItem(this.accessTokenKey);
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem(this.refreshTokenKey);
+  }
+
+  // ===== Private Helpers =====
+
+  private storeTokens(res: AuthResponse): void {
+    localStorage.setItem(this.accessTokenKey, res.token);
+    localStorage.setItem(this.refreshTokenKey, res.refreshToken);
+  }
+
+  private clearTokens(): void {
+    localStorage.removeItem(this.accessTokenKey);
+    localStorage.removeItem(this.refreshTokenKey);
+  }
+
+  private hasValidAccessToken(): boolean {
+    const token = this.getAccessToken();
+    if (!token) return false;
+
+    const payload = this.decodeJwtPayload(token);
+    const exp = payload?.exp;
+    const now = Math.floor(Date.now() / 1000);
+    return !!exp && exp > now;
+  }
+
+  private decodeJwtPayload(token: string): any | null {
+    try {
+      const base64 = token.split('.')[1];
+      const json = atob(base64);
+      return JSON.parse(json);
+    } catch {
+      return null;
+    }
+  }
+
+  private forceLogout(): void {
+    this.clearTokens();
+    this.isAuthenticatedSubject.next(false);
+    this.router.navigate(['/login']);
   }
 }
