@@ -11,6 +11,8 @@ export class HeaderComponent {
 
   @Input() public title: string = "";
   @Input() loggedIn: boolean = false;
+  @Input() userFullName: string = "";
+
   @Output() onLogoutClick: EventEmitter<void> = new EventEmitter<void>();
 
   public logout(): void {

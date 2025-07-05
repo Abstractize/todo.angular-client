@@ -10,7 +10,7 @@ describe('ConfirmModalComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ConfirmModalComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ConfirmModalComponent);
     component = fixture.componentInstance;

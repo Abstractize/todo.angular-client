@@ -1,9 +1,14 @@
-import { ApplicationRef, ComponentFactoryResolver, Injectable, Injector } from '@angular/core';
+import {
+  ApplicationRef,
+  ComponentFactoryResolver,
+  Injectable,
+  Injector,
+  Type
+} from '@angular/core';
+
 import { ModalWrapperComponent } from '../components/modal-wrapper/modal-wrapper.component';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class ModalService {
   constructor(
     private appRef: ApplicationRef,
@@ -11,15 +16,16 @@ export class ModalService {
     private resolver: ComponentFactoryResolver
   ) { }
 
-  open(title: string, body: string): Promise<boolean | null> {
+  open(component: Type<any>, options?: { title?: string; data?: any }): Promise<any> {
     return new Promise((resolve) => {
       const factory = this.resolver.resolveComponentFactory(ModalWrapperComponent);
       const componentRef = factory.create(this.injector);
 
-      componentRef.instance.title = title;
-      componentRef.instance.body = body;
+      componentRef.instance.title = options?.title || '';
+      componentRef.instance.bodyComponent = component;
+      componentRef.instance.data = options?.data || {};
 
-      componentRef.instance.closed.subscribe((result: boolean | null) => {
+      componentRef.instance.closed.subscribe((result: any) => {
         resolve(result);
         this.appRef.detachView(componentRef.hostView);
         componentRef.destroy();

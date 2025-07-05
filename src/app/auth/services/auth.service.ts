@@ -3,8 +3,8 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, filter, switchMap, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
-import { AuthResponse } from '../models/auth-response';
-import { LoginRequest } from '../models/login-request';
+import { AuthResponse } from '../models/auth-response.model';
+import { LoginRequest } from '../models/login-request.model';
 import { AuthRepository } from '../repositories/auth.repository';
 
 @Injectable({
@@ -17,6 +17,16 @@ export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable().pipe(
     filter(value => value !== null && value !== undefined)
+  );
+
+  public userFullName$: Observable<string> = this.isAuthenticated$.pipe(
+    switchMap(isAuth => {
+      if (!isAuth) return of('');
+      const token = this.getAccessToken();
+      if (!token) return of('');
+      const payload = this.decodeJwtPayload(token);
+      return of(payload?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || '');
+    })
   );
 
   constructor(

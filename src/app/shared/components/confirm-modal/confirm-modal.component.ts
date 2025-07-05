@@ -4,7 +4,6 @@ import { Component, Input } from '@angular/core';
   selector: 'app-confirm-modal',
   standalone: false,
   templateUrl: './confirm-modal.component.html',
-  styleUrl: './confirm-modal.component.scss'
 })
 export class ConfirmModalComponent {
   @Input() title!: string;

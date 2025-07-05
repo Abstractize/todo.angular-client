@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { TaskListRepository } from '../../repositories/task-list.repository';
-import { TaskList } from '../../models/task-list';
+import { TaskList } from '../../models/task-list.model';
 import { ModalService } from '../../../shared/services/modal.service';
 import { ConfirmModalComponent } from '../../../shared/components';
+import { TaskListModalComponent } from '../../components';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +17,8 @@ export class DashboardComponent {
 
   constructor(
     private readonly modalService: ModalService,
-    private readonly itemListRepository: TaskListRepository
+    private readonly itemListRepository: TaskListRepository,
+    private readonly router: Router
   ) {
     this.loadTaskList();
   }
@@ -31,27 +34,36 @@ export class DashboardComponent {
     });
   }
 
-  addTaskList(): void {
-    const newTaskList: TaskList = {
-      id: null,
-      title: 'New Task List',
-      description: ''
-    };
-
-    this.itemListRepository.add(newTaskList).subscribe({
-      next: () => {
-        this.loadTaskList();
-      },
-      error: (error) => {
-        console.error('Error adding task list:', error);
+  async addTaskList(): Promise<void> {
+    const newTaskList: TaskList | null = await this.modalService.open(TaskListModalComponent, {
+      title: 'Add New Task List',
+      data: {
+        taskList: { id: null, title: '', description: '' }
       }
     });
+
+    if (newTaskList) {
+      this.itemListRepository.add(newTaskList).subscribe({
+        next: () => {
+          this.loadTaskList();
+        },
+        error: (error) => {
+          console.error('Error adding task list:', error);
+        }
+      });
+    }
   }
 
-  async deleteTaskList(taskList: TaskList): Promise<void> {
-    const result = await this.modalService.open('¿Confirmar acción?', 'Esta acción no se puede deshacer.');
+  async deleteTaskList(taskList: TaskList, event: MouseEvent): Promise<void> {
+    event.stopPropagation();
 
-    const confirmed: boolean = false;
+    const confirmed = await this.modalService.open(ConfirmModalComponent, {
+      title: `Delete "${taskList.title}"`,
+      data: {
+        title: 'Are you sure?',
+        message: `This action will permanently delete  "${taskList.title}" from your task list.`
+      }
+    });
 
     if (confirmed) {
       if (taskList.id) {
@@ -67,8 +79,18 @@ export class DashboardComponent {
     }
   }
 
-  editTaskList(taskList: TaskList): void {
-    if (taskList.id) {
+  async editTaskList(existing: TaskList, event: MouseEvent): Promise<void> {
+    event.stopPropagation();
+
+    const taskList: TaskList | null = await this.modalService.open(TaskListModalComponent, {
+      title: 'Edit Task List',
+      data: {
+        title: 'Edit Task List',
+        taskList: { ...existing }
+      }
+    });
+
+    if (taskList) {
       this.itemListRepository.update(taskList).subscribe({
         next: () => {
           this.loadTaskList();
@@ -78,5 +100,13 @@ export class DashboardComponent {
         }
       });
     }
+  }
+
+  goToList(taskList: TaskList, event: MouseEvent): void {
+    if (event && (event.target as HTMLElement).closest('.dropdown')) {
+      return;
+    }
+
+    this.router.navigate(['/task-list', taskList.id]);
   }
 }
