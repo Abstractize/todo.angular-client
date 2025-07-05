@@ -1,0 +1,8 @@
+<div class="text-center">
+    <h5>{{ title }}</h5>
+    <p>{{ message }}</p>
+    <div class="d-flex justify-content-center gap-2 mt-3">
+        <button class="btn btn-secondary" (click)="close(false)">Cancel</button>
+        <button class="btn btn-danger" (click)="close(true)">Confirm</button>
+    </div>
+</div>

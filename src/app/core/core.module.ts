@@ -17,6 +17,5 @@ import { SharedModule } from '../shared/shared.module';
     HeaderComponent,
     FooterComponent
   ],
-  providers: []
 })
 export class CoreModule { }

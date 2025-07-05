@@ -12,7 +12,7 @@ import { AsyncPipe } from '@angular/common';
 })
 
 export class AppComponent {
-  title = 'ToDo';
+  title = 'To Do Application';
 
   constructor(
     public readonly authService: AuthService,

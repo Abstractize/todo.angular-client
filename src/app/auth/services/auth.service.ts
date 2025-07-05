@@ -134,6 +134,6 @@ export class AuthService {
   private forceLogout(): void {
     this.clearTokens();
     this.isAuthenticatedSubject.next(false);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
   }
 }

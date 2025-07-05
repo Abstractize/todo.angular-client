@@ -1,1 +1,43 @@
-<p>dashboard works!</p>
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>My Lists</h2>
+        <button class="btn btn-primary" (click)="addTaskList()">
+            <i class="bi bi-plus"></i> Add Task List
+        </button>
+    </div>
+
+    <div *ngIf="taskList.length > 0; else noItems" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="col" *ngFor="let task of taskList">
+            <div class="card position-relative h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ task.title }}</h5>
+                    <p class="card-text text-muted">{{ task.description }}</p>
+
+                    <!-- Dropdown (3 puntos) -->
+                    <div class="dropdown position-absolute top-0 end-0 m-2">
+                        <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" (click)="editTaskList(task)">Edit</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger" (click)="deleteTaskList(task)">Delete</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #noItems>
+        <div class="d-flex justify-content-center align-items-center text-muted" style="height: 60vh;">
+            No task lists found.
+        </div>
+    </ng-template>
+
+</div>
