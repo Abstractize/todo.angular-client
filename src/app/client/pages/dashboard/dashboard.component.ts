@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TaskListRepository } from '../../repositories/task-list.repository';
-import { TaskList } from '../../models/task-list.model';
+import { TaskList } from '../../models';
 import { ModalService } from '../../../shared/services/modal.service';
 import { ConfirmModalComponent } from '../../../shared/components';
 import { TaskListModalComponent } from '../../components';

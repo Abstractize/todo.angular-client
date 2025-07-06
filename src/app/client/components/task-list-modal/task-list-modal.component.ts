@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TaskList } from '../../models/task-list.model';
+import { TaskList } from '../../models';
 
 @Component({
   selector: 'app-task-list-modal',

@@ -3,8 +3,7 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, filter, switchMap, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
-import { AuthResponse } from '../models/auth-response.model';
-import { LoginRequest } from '../models/login-request.model';
+import { AuthResponse, LoginRequest, RegisterRequest } from '../models';
 import { AuthRepository } from '../repositories/auth.repository';
 
 @Injectable({
@@ -58,8 +57,18 @@ export class AuthService {
     return of(void 0);
   }
 
+  register(request: RegisterRequest): Observable<void> {
+    return this.authRepository.register(request).pipe(
+      tap(res => {
+        this.storeTokens(res);
+        this.isAuthenticatedSubject.next(true);
+      }),
+      switchMap(() => of(void 0))
+    );
+  }
+
   login(request: LoginRequest): Observable<void> {
-    return this.authRepository.post(request).pipe(
+    return this.authRepository.login(request).pipe(
       tap(res => {
         this.storeTokens(res);
         this.isAuthenticatedSubject.next(true);
