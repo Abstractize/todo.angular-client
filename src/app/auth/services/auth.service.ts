@@ -3,8 +3,8 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, filter, switchMap, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
-import { AuthResponse, LoginRequest, RegisterRequest } from '../models';
-import { AuthRepository } from '../repositories/auth.repository';
+import { AuthResponse, LoginRequest, RegisterRequest } from '@auth/models';
+import { AuthRepository } from '@auth/repositories';
 
 @Injectable({
   providedIn: 'root'

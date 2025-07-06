@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
-import { LandingComponent } from './pages/landing/landing.component';
-import { SharedModule } from '../shared/shared.module';
+import { LandingComponent } from './pages';
+import { SharedModule } from '@shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { routes } from './public.routes';
 

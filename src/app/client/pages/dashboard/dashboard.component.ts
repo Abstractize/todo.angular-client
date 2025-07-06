@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { TaskListRepository } from '../../repositories/task-list.repository';
-import { TaskList } from '../../models';
-import { ModalService } from '../../../shared/services/modal.service';
-import { ConfirmModalComponent } from '../../../shared/components';
-import { TaskListModalComponent } from '../../components';
+import { TaskListRepository } from '@client/repositories';
+import { TaskList } from '@client/models';
+import { ModalService } from '@shared/services/';
+import { ConfirmModalComponent } from '@shared/components';
+import { TaskListModalComponent } from '@client/components';
 import { Router } from '@angular/router';
 
 @Component({

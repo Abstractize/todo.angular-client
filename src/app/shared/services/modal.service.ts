@@ -6,7 +6,7 @@ import {
   Type
 } from '@angular/core';
 
-import { ModalWrapperComponent } from '../components/modal-wrapper/modal-wrapper.component';
+import { ModalWrapperComponent } from '@shared/components';
 
 @Injectable({ providedIn: 'root' })
 export class ModalService {

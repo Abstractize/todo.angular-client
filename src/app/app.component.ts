@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { CoreModule } from './core/core.module';
-import { AuthService } from './auth/services/auth.service';
+import { AuthService } from '@auth/services';
 import { AsyncPipe } from '@angular/common';
 
 @Component({

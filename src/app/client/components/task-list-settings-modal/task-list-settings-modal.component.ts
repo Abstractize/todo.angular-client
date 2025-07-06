@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TaskList } from '../../models';
-import { TaskListRepository } from '../../repositories/task-list.repository';
-import { ModalService } from '../../../shared/services/modal.service';
-import { ConfirmModalComponent } from '../../../shared/components';
+import { TaskList } from '@client/models';
+import { TaskListRepository } from '@client/repositories';
+import { ModalService } from '@shared/services/';
+import { ConfirmModalComponent } from '@shared/components';
 
 @Component({
   selector: 'app-task-list-settings-modal',

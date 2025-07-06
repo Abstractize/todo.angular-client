@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TaskItem, TaskList } from '../../models';
-import { TaskItemRepository } from '../../repositories/task-item.repository';
-import { TaskListRepository } from '../../repositories/task-list.repository';
+import { TaskItem, TaskList } from '@client/models';
+import { TaskItemRepository, TaskListRepository } from '@client/repositories';
 import { ActivatedRoute } from '@angular/router';
-import { ModalService } from '../../../shared/services/modal.service';
-import { ConfirmModalComponent } from '../../../shared/components';
-import { EditTaskModalComponent, TaskListSettingsModalComponent } from '../../components';
+import { ModalService } from '@shared/services/';
+import { ConfirmModalComponent } from '@shared/components';
+import { EditTaskModalComponent, TaskListSettingsModalComponent } from '@client/components';
 
 @Component({
   selector: 'app-task-list',

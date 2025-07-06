@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ModalWrapperComponent } from './components/modal-wrapper/modal-wrapper.component';
-import { ConfirmModalComponent } from './components';
+import { ModalWrapperComponent, ConfirmModalComponent } from './components';
 
 @NgModule({
   exports: [
