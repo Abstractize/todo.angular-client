@@ -1,21 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-
-
+import { ModalWrapperComponent, ConfirmModalComponent, ToastComponent } from './components';
 
 @NgModule({
-  exports: [
-    CommonModule,
-    ReactiveFormsModule
-  ],
-  declarations: [],
   imports: [
     CommonModule,
     ReactiveFormsModule
   ],
-  providers: [
-
-  ]
+  declarations: [
+    ModalWrapperComponent,
+    ConfirmModalComponent,
+    ToastComponent
+  ],
+  exports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ConfirmModalComponent,
+    ToastComponent,
+  ],
 })
 export class SharedModule { }

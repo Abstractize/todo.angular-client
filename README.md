@@ -1,59 +1,101 @@
-# TodoAngularClient
+# 📝 TodoApp Frontend (Angular)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.14.
+This is the frontend for the **TodoApp** project, built with [Angular 19](https://angular.io/). It connects to a backend API through a YARP Gateway and handles user authentication, task management, and more.
 
-## Development server
+---
 
-To start a local development server, run:
+## 🚀 Tech Stack
 
-```bash
-ng serve
-```
+- **Angular 19**
+- **Bootstrap 5 + Bootstrap Icons**
+- **RxJS**
+- **SCSS**
+- **JWT Authentication**
+- **YARP Gateway Integration**
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 📁 Project Structure
 
 ```bash
-ng generate --help
+src/
+├── app/
+│   ├── admin/         # Admin-specific UI
+│   ├── auth/          # Login, register, auth services
+│   ├── client/        # Core user features like todo lists
+│   ├── core/          # Global services, guards, resolvers
+│   ├── interceptors/  # HTTP interceptors (e.g., auth)
+│   ├── public/        # Public-facing modules
+│   └── shared/        # Shared components, pipes, models
+├── main.ts
+└── styles.scss
 ```
 
-## Building
+---
 
-To build the project run:
+## 📦 Setup
+
+### ✅ Prerequisites
+
+- [Node.js 18+](https://nodejs.org/)
+- [Angular CLI 19+](https://angular.io/cli)
+
+---
+
+### 📥 Installation
 
 ```bash
-ng build
+npm install
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### ▶️ Development Server
 
 ```bash
-ng test
+npm start
 ```
 
-## Running end-to-end tests
+- Runs on: `http://localhost:4200`
+- Make sure your YARP API Gateway is running on `http://localhost:8000` or adjust `environment.ts` accordingly.
 
-For end-to-end (e2e) testing, run:
+---
+
+## 🔐 Authentication
+
+- Login/Register handled via Auth microservice
+- JWT stored in `localStorage`
+- AuthInterceptor injects access token into HTTP requests
+- Refresh token logic managed automatically in the backend
+
+---
+
+## 🧪 Testing
 
 ```bash
-ng e2e
+npm test
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+- Uses Karma and Jasmine
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 🛠️ Build for Production
+
+```bash
+npm run build
+```
+
+- Output in: `dist/todo.angular-client/`
+
+---
+
+## 📜 License
+
+[MIT](./LICENSE)
+
+---
+
+## 🤝 Contributing
+
+Pull requests welcome. For major changes, please open an issue first to discuss.

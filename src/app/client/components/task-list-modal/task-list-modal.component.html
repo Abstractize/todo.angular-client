@@ -1,0 +1,22 @@
+<div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+            <label for="taskListTitle" class="form-label">Title</label>
+            <input id="taskListTitle" type="text" class="form-control" formControlName="title" />
+            <div class="text-danger small mt-1" *ngIf="form.get('title')?.touched && form.get('title')?.invalid">
+                <span *ngIf="form.get('title')?.errors?.['required']">Title is required.</span>
+                <span *ngIf="form.get('title')?.errors?.['minlength']">Minimum 3 characters.</span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="taskListDescription" class="form-label">Description</label>
+            <textarea id="taskListDescription" class="form-control" rows="3" formControlName="description"></textarea>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Save</button>
+        </div>
+    </form>
+</div>

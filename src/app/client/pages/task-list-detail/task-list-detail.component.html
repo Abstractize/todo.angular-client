@@ -1,0 +1,60 @@
+<div class="container mt-4" *ngIf="!isLoading; else loading">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>{{ taskList?.title }}</h2>
+        <button type="button" class="btn btn-primary" (click)="openSettings()">
+            <i class="bi bi-gear-fill"></i> Settings
+        </button>
+    </div>
+
+    <p class="text-muted">{{ taskList?.description }}</p>
+
+    <hr>
+
+    <!-- Formulario para agregar tarea -->
+    <form [formGroup]="form" (ngSubmit)="addTask()" class="input-group mb-4">
+        <input type="text" class="form-control" formControlName="title" placeholder="Add a new task" />
+        <button class="btn btn-outline-secondary" type="submit" [disabled]="form.invalid">Add Task</button>
+    </form>
+
+    <div *ngIf="taskList">
+        <div *ngIf="tasks.length > 0; else noItems">
+            <div *ngFor="let task of tasks"
+                class="d-flex align-items-center justify-content-between border rounded p-2 mb-2 shadow-sm bg-light">
+                <div class="form-check d-flex align-items-center">
+                    <input class="form-check-input me-2" type="radio" [checked]="task.isCompleted"
+                        (change)="toggleTask(task)" />
+                    <label class="form-check-label mb-0" [class.text-decoration-line-through]="task.isCompleted">
+                        {{ task.title }}
+                    </label>
+                </div>
+
+                <!-- Dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" (click)="editTask(task)">Edit</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" (click)="deleteTask(task)">Delete</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <ng-template #noItems>
+            <div class="d-flex justify-content-center align-items-center text-muted" style="height: 60vh;">
+                No tasks found.
+            </div>
+        </ng-template>
+    </div>
+</div>
+
+<ng-template #loading>
+    <div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
+        <div class="spinner-border" role="status"></div>
+    </div>
+</ng-template>

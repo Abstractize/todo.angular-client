@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row justify-content-center">
-        <h2 class="text-center mt-5">Login</h2>
-        <form [formGroup]="currentForm" (ngSubmit)="onSubmit()">
+        <h2 class="text-center">Login</h2>
+        <form [formGroup]="currentForm" class="mt-3" (ngSubmit)="onSubmit()">
             <div class="form-group">
                 <label class="login-label" for="email">Email</label>
                 <input type="email" class="form-control" id="email" formControlName="email" placeholder="Enter email">

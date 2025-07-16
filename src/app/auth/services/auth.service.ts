@@ -3,9 +3,8 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, filter, switchMap, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
-import { AuthResponse } from '../models/auth-response';
-import { LoginRequest } from '../models/login-request';
-import { AuthRepository } from '../repositories/auth.repository';
+import { AuthResponse, LoginRequest, RegisterRequest } from '@auth/models';
+import { AuthRepository } from '@auth/repositories';
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +18,25 @@ export class AuthService {
     filter(value => value !== null && value !== undefined)
   );
 
+  public userFullName$: Observable<string> = this.isAuthenticated$.pipe(
+    switchMap(isAuth => {
+      if (!isAuth) return of('');
+      const token = this.getAccessToken();
+      if (!token) return of('');
+      const payload = this.decodeJwtPayload(token);
+      return of(payload?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || '');
+    })
+  );
+
   constructor(
     private readonly authRepository: AuthRepository,
     private readonly router: Router
   ) { }
+
+  // ===== Getters =====
+  get isAuthenticated(): boolean {
+    return this.isAuthenticatedSubject.getValue();
+  }
 
   // ===== Public Methods =====
 
@@ -48,8 +62,18 @@ export class AuthService {
     return of(void 0);
   }
 
+  register(request: RegisterRequest): Observable<void> {
+    return this.authRepository.register(request).pipe(
+      tap(res => {
+        this.storeTokens(res);
+        this.isAuthenticatedSubject.next(true);
+      }),
+      switchMap(() => of(void 0))
+    );
+  }
+
   login(request: LoginRequest): Observable<void> {
-    return this.authRepository.post(request).pipe(
+    return this.authRepository.login(request).pipe(
       tap(res => {
         this.storeTokens(res);
         this.isAuthenticatedSubject.next(true);
@@ -134,6 +158,5 @@ export class AuthService {
   private forceLogout(): void {
     this.clearTokens();
     this.isAuthenticatedSubject.next(false);
-    this.router.navigate(['/login']);
   }
 }

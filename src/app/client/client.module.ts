@@ -1,14 +1,18 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { routes } from './client.routes';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-
-
+import { EditTaskModalComponent, TaskListModalComponent, TaskListSettingsModalComponent } from './components/';
+import { DashboardComponent, TaskListDetailComponent } from './pages';
 
 @NgModule({
   declarations: [
-    DashboardComponent
+    DashboardComponent,
+    TaskListDetailComponent,
+
+    TaskListModalComponent,
+    EditTaskModalComponent,
+    TaskListSettingsModalComponent
   ],
   imports: [
     SharedModule,

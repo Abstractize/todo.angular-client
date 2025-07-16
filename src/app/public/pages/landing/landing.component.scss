@@ -1,0 +1,42 @@
+.landing-page {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f') center/cover no-repeat;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .overlay {
+        background: rgba(0, 0, 0, 0.6);
+        position: absolute;
+        inset: 0; // cubre todo el espacio
+        z-index: 1;
+    }
+
+    .container {
+        position: relative;
+        z-index: 2;
+        padding: 2rem;
+    }
+
+    h1 {
+        font-size: 3.5rem;
+        text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    p {
+        font-size: 1.25rem;
+        max-width: 600px;
+        margin: auto;
+        color: #e0e0e0;
+    }
+
+    .btn {
+        min-width: 140px;
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    }
+}

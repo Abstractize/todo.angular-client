@@ -1,10 +1,22 @@
 import { Routes } from '@angular/router';
-import { LandingComponent } from './pages';
+import { ForbiddenComponent, LandingComponent, NotFoundComponent } from './pages';
+import { guestGuard } from '@core/guards';
 
 export const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        component: LandingComponent
+        component: LandingComponent,
+        canActivate: [guestGuard],
     },
+    {
+        path: 'not-found',
+        pathMatch: 'full',
+        component: NotFoundComponent,
+    },
+    {
+        path: 'access-denied',
+        pathMatch: 'full',
+        component: ForbiddenComponent,
+    }
 ];

@@ -1,9 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthResponse } from '../models/auth-response';
-import { LoginRequest } from '../models/login-request';
-import { TokenActionRequest } from '../models/token-action-request';
+import { AuthResponse, LoginRequest, RegisterRequest, TokenActionRequest } from '@auth/models';
 
 @Injectable({
     providedIn: 'root'
@@ -11,12 +9,16 @@ import { TokenActionRequest } from '../models/token-action-request';
 export class AuthRepository {
     constructor(private readonly httpClient: HttpClient) { }
 
-    public post(loginRequest: LoginRequest): Observable<AuthResponse> {
+    public login(loginRequest: LoginRequest): Observable<AuthResponse> {
         return this.httpClient.post<AuthResponse>(`/api/auth/login`, loginRequest);
     }
 
     public refreshToken(tokenActionRequest: TokenActionRequest): Observable<AuthResponse> {
         return this.httpClient.post<AuthResponse>(`/api/auth/refresh`, tokenActionRequest);
+    }
+
+    public register(registerRequest: RegisterRequest): Observable<AuthResponse> {
+        return this.httpClient.post<AuthResponse>(`/api/auth/register`, registerRequest);
     }
 
     public logout(tokenActionRequest: TokenActionRequest): Observable<void> {

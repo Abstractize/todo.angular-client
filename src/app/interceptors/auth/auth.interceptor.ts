@@ -5,37 +5,34 @@ import {
 } from '@angular/common/http';
 import { catchError, switchMap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { AuthService } from '../../auth/services/auth.service';
+import { AuthService } from '@auth/services';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
+
+  const isPublicRoute = req.url.includes('/auth');
+
+  if (isPublicRoute) return next(req);
 
   const token = authService.getAccessToken();
   let authReq = req;
 
   if (token) {
     authReq = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
+      setHeaders: { Authorization: `Bearer ${token}` }
     });
   }
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status !== 401) {
-        return throwError(() => error);
-      }
+      if (error.status !== 401) return throwError(() => error);
 
       return authService.refreshToken().pipe(
         switchMap(() => {
           const newToken = authService.getAccessToken();
           const retryReq = req.clone({
-            setHeaders: {
-              Authorization: `Bearer ${newToken}`,
-            },
+            setHeaders: { Authorization: `Bearer ${newToken}` }
           });
-
           return next(retryReq);
         }),
         catchError(refreshError => {

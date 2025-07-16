@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
-import { LandingComponent } from './pages/landing/landing.component';
-import { SharedModule } from '../shared/shared.module';
+import { ForbiddenComponent, LandingComponent, NotFoundComponent } from './pages';
+import { SharedModule } from '@shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { routes } from './public.routes';
 
@@ -8,7 +8,9 @@ import { routes } from './public.routes';
 
 @NgModule({
   declarations: [
+    ForbiddenComponent,
     LandingComponent,
+    NotFoundComponent
   ],
   imports: [
     SharedModule,

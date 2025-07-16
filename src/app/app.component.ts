@@ -1,22 +1,25 @@
 import { Component } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { CoreModule } from './core/core.module';
-import { AuthService } from './auth/services/auth.service';
+import { AuthService } from '@auth/services';
 import { AsyncPipe } from '@angular/common';
+import { SharedModule } from '@shared/shared.module';
+import { ToastService } from '@shared/services';
 
 @Component({
   selector: 'app-root',
-  imports: [AsyncPipe, CoreModule, RouterOutlet],
+  imports: [AsyncPipe, CoreModule, RouterOutlet, SharedModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 
 export class AppComponent {
-  title = 'ToDo';
+  title = 'To-Do App';
 
   constructor(
     public readonly authService: AuthService,
     private readonly router: Router,
+    private readonly toast: ToastService,
   ) {
     this.authService.initializeAuth().subscribe();
   }
@@ -30,9 +33,7 @@ export class AppComponent {
       next: () => {
         this.router.navigate(['/auth/login']);
       },
-      error: (err) => {
-        console.error('Logout failed', err);
-      }
+      error: (err) => this.toast.error(err, 'Failed to log out. Please try again.')
     });
   }
 }
