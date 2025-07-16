@@ -27,8 +27,6 @@ src/
 │   ├── interceptors/  # HTTP interceptors (e.g., auth)
 │   ├── public/        # Public-facing modules
 │   └── shared/        # Shared components, pipes, models
-├── assets/
-├── environments/      # Environment-specific config
 ├── main.ts
 └── styles.scss
 ```
