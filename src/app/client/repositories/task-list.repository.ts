@@ -22,7 +22,6 @@ export class TaskListRepository {
     }
 
     public update(taskList: TaskList): Observable<void> {
-        console.log('Updating task list:', taskList);
         return this.httpClient.put<void>(`/api/tasks/tasklist/${taskList.id}`, taskList);
     }
 

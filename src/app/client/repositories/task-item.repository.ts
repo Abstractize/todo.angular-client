@@ -18,7 +18,6 @@ export class TaskItemRepository {
     }
 
     public update(taskItem: TaskItem): Observable<void> {
-        console.log('Updating task item:', taskItem);
         return this.httpClient.put<void>(`/api/tasks/taskitem/${taskItem.id}`, taskItem);
     }
 

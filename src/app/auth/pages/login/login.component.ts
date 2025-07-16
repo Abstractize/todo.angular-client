@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { AuthService } from '@auth/services';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastService } from '@shared/services';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +17,8 @@ export class LoginComponent {
   constructor(
     private readonly authService: AuthService,
     private readonly formBuilder: UntypedFormBuilder,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly toast: ToastService
   ) {
     this.currentForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -26,9 +29,7 @@ export class LoginComponent {
   onSubmit() {
     this.authService.login(this.currentForm?.getRawValue()).subscribe({
       next: () => this.router.navigate(['/dashboard']),
-      error: (error) => {
-        alert(error.error.message || 'Login failed');
-      }
+      error: (error: HttpErrorResponse) => this.toast.error(error, 'Login failed. Please check your credentials and try again.')
     });
   }
 }

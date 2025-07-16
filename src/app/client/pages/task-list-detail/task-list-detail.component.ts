@@ -3,9 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TaskItem, TaskList } from '@client/models';
 import { TaskItemRepository, TaskListRepository } from '@client/repositories';
 import { ActivatedRoute } from '@angular/router';
-import { ModalService } from '@shared/services/';
+import { ModalService, ToastService } from '@shared/services/';
 import { ConfirmModalComponent } from '@shared/components';
 import { EditTaskModalComponent, TaskListSettingsModalComponent } from '@client/components';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-task-list',
@@ -26,7 +27,8 @@ export class TaskListDetailComponent implements OnInit {
     private readonly taskListRepository: TaskListRepository,
     private readonly taskItemRepository: TaskItemRepository,
     private readonly modalService: ModalService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly toast: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -38,9 +40,7 @@ export class TaskListDetailComponent implements OnInit {
         next: (taskList: TaskList) => {
           this.taskList = taskList;
         },
-        error: (err) => {
-          console.error(err);
-        }
+        error: (err: HttpErrorResponse) => this.toast.error(err, 'Failed to load task list details.')
       });
     });
 
@@ -56,7 +56,7 @@ export class TaskListDetailComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error(err);
+        this.toast.error(err, 'Failed to load tasks for this list.');
         this.isLoading = false;
       }
     });

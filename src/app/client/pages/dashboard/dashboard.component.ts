@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TaskListRepository } from '@client/repositories';
 import { TaskList } from '@client/models';
-import { ModalService } from '@shared/services/';
+import { ModalService, ToastService } from '@shared/services/';
 import { ConfirmModalComponent } from '@shared/components';
 import { TaskListModalComponent } from '@client/components';
 import { Router } from '@angular/router';
@@ -18,7 +18,8 @@ export class DashboardComponent {
   constructor(
     private readonly modalService: ModalService,
     private readonly itemListRepository: TaskListRepository,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly toast: ToastService
   ) {
     this.loadTaskList();
   }
@@ -28,9 +29,7 @@ export class DashboardComponent {
       next: (itemLists: TaskList[]) => {
         this.taskList = itemLists;
       },
-      error: (error) => {
-        console.error('Error loading task list:', error);
-      }
+      error: (error) => this.toast.error(error, 'Failed to load task lists.')
     });
   }
 
@@ -47,9 +46,7 @@ export class DashboardComponent {
         next: () => {
           this.loadTaskList();
         },
-        error: (error) => {
-          console.error('Error adding task list:', error);
-        }
+        error: (error) => this.toast.error(error, 'Failed to add new task list.')
       });
     }
   }
@@ -71,9 +68,7 @@ export class DashboardComponent {
           next: () => {
             this.loadTaskList();
           },
-          error: (error) => {
-            console.error('Error deleting task list:', error);
-          }
+          error: (error) => this.toast.error(error, 'Failed to delete task list.')
         });
       }
     }
@@ -95,9 +90,7 @@ export class DashboardComponent {
         next: () => {
           this.loadTaskList();
         },
-        error: (error) => {
-          console.error('Error updating task list:', error);
-        }
+        error: (error) => this.toast.error(error, 'Failed to update task list.')
       });
     }
   }

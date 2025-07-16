@@ -1,0 +1,10 @@
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1200">
+    <div *ngFor="let toast of toasts" class="toast show align-items-center border-0 mb-2"
+        [ngClass]="getBootstrapClass(toast.type)" role="alert">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{ toast.text }}
+            </div>
+        </div>
+    </div>
+</div>

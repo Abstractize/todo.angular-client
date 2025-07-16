@@ -33,6 +33,11 @@ export class AuthService {
     private readonly router: Router
   ) { }
 
+  // ===== Getters =====
+  get isAuthenticated(): boolean {
+    return this.isAuthenticatedSubject.getValue();
+  }
+
   // ===== Public Methods =====
 
   initializeAuth(): Observable<void> {
@@ -153,6 +158,5 @@ export class AuthService {
   private forceLogout(): void {
     this.clearTokens();
     this.isAuthenticatedSubject.next(false);
-    this.router.navigate(['/auth/login']);
   }
 }
