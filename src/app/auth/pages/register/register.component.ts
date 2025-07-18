@@ -52,7 +52,7 @@ export class RegisterComponent {
     };
 
     this.authService.register(registerRequest).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
+      next: () => this.router.navigate(['/analytics']),
       error: (err) => this.toast.error(err, 'Registration failed. Please check your details and try again.'),
     });
   }

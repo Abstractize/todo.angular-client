@@ -6,7 +6,7 @@ This is the frontend for the **TodoApp** project, built with [Angular 19](https:
 
 ## 🚀 Tech Stack
 
-- **Angular 19**
+- **Angular 20**
 - **Bootstrap 5 + Bootstrap Icons**
 - **RxJS**
 - **SCSS**

@@ -28,7 +28,7 @@ export class LoginComponent {
 
   onSubmit() {
     this.authService.login(this.currentForm?.getRawValue()).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
+      next: () => this.router.navigate(['/analytics']),
       error: (error: HttpErrorResponse) => this.toast.error(error, 'Login failed. Please check your credentials and try again.')
     });
   }

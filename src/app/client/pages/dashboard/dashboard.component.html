@@ -7,36 +7,54 @@
         </button>
     </div>
 
-    <div *ngIf="taskList.length > 0; else noItems" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        <div class="col" *ngFor="let task of taskList">
-            <div class="card position-relative h-100" style="cursor: pointer;" (click)="goToList(task, $event)">
-                <div class="card-body">
-                    <h5 class="card-title">{{ task.title }}</h5>
-                    <p class="card-text text-muted">{{ task.description }}</p>
+    <div class="tasks-container">
+        <div class="tasks">
+            <div *ngIf="taskList.length > 0; else noItems" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <div class="col" *ngFor="let task of taskList">
+                    <div class="card position-relative h-100" style="cursor: pointer;" (click)="goToList(task, $event)">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ task.title }}</h5>
+                            <p class="card-text text-muted">{{ task.description }}</p>
 
-                    <div class="dropdown position-absolute top-0 end-0 m-2">
-                        <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <i class="bi bi-three-dots-vertical"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <a class="dropdown-item" (click)="editTaskList(task, $event)">Edit</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-danger" (click)="deleteTaskList(task, $event)">Delete</a>
-                            </li>
-                        </ul>
+                            <div class="dropdown position-absolute top-0 end-0 m-2">
+                                <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a class="dropdown-item" (click)="editTaskList(task, $event)">Edit</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item text-danger"
+                                            (click)="deleteTaskList(task, $event)">Delete</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ng-template #noItems>
+            <div class="d-flex justify-content-center align-items-center text-muted" style="height: 60vh;">
+                No task lists found.
+            </div>
+        </ng-template>
+    </div>
+
+    <div *ngIf="recommendations.length > 0" class="mb-4 recommendations-section">
+        <h5>Recommended Lists</h5>
+        <div class="row row-cols-1 row-cols-md-3 g-3">
+            <div class="col" *ngFor="let rec of recommendations">
+                <div class="card h-100" (click)="addRecommendedList(rec)">
+                    <div class="card-body">
+                        <h6 class="card-title mb-1">{{ rec.title }}</h6>
+                        <p class="card-text text-muted mb-0">{{ rec.description }}</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <ng-template #noItems>
-        <div class="d-flex justify-content-center align-items-center text-muted" style="height: 60vh;">
-            No task lists found.
-        </div>
-    </ng-template>
 
 </div>

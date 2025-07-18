@@ -3,10 +3,11 @@ import { SharedModule } from '@shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { routes } from './client.routes';
 import { EditTaskModalComponent, TaskListModalComponent, TaskListSettingsModalComponent } from './components/';
-import { DashboardComponent, TaskListDetailComponent } from './pages';
+import { AnalyticsComponent, DashboardComponent, TaskListDetailComponent } from './pages';
 
 @NgModule({
   declarations: [
+    AnalyticsComponent,
     DashboardComponent,
     TaskListDetailComponent,
 

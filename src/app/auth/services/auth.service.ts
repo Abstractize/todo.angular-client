@@ -28,6 +28,16 @@ export class AuthService {
     })
   );
 
+  public userId$: Observable<string> = this.isAuthenticated$.pipe(
+    switchMap(isAuth => {
+      if (!isAuth) return of('');
+      const token = this.getAccessToken();
+      if (!token) return of('');
+      const payload = this.decodeJwtPayload(token);
+      return of(payload?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] || '');
+    })
+  );
+
   constructor(
     private readonly authRepository: AuthRepository,
     private readonly router: Router
