@@ -15,6 +15,12 @@ import { Router } from '@angular/router';
 export class DashboardComponent {
   taskList: TaskList[] = [];
 
+  recommendations: TaskList[] = [
+    { id: null, title: 'Sprint Planning', description: 'Plan the upcoming sprint tasks' },
+    { id: null, title: 'Code Review', description: 'Review pull requests and code quality' },
+    { id: null, title: 'Daily Standup', description: 'Discuss daily progress and blockers' }
+  ];
+
   constructor(
     private readonly modalService: ModalService,
     private readonly itemListRepository: TaskListRepository,
@@ -101,5 +107,17 @@ export class DashboardComponent {
     }
 
     this.router.navigate(['/task-list', taskList.id]);
+  }
+
+  addRecommendedList(rec: TaskList): void {
+    const exists = this.taskList.some(t => t.title === rec.title);
+    if (!exists) {
+      this.itemListRepository.add(rec).subscribe({
+        next: () => {
+          this.loadTaskList();
+        },
+        error: (error) => this.toast.error(error, 'Failed to add new task list.')
+      });
+    }
   }
 }

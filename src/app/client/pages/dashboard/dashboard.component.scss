@@ -1,0 +1,30 @@
+.tasks-container {
+
+    .tasks {
+        overflow-y: visible;
+        overflow-x: hidden;
+        height: 65vh;
+    }
+}
+
+
+
+.recommendations-section {
+    margin-top: 5px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+
+    h3 {
+        margin-bottom: 15px;
+    }
+
+    .recommendation-item {
+        padding: 10px;
+        border-bottom: 1px solid #dee2e6;
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+}
