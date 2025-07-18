@@ -1,1 +1,58 @@
-<p>analytics works!</p>
+<div class="container py-4">
+    <div class="row g-3">
+        <div class="col-md-3" *ngIf="summary">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Tareas Creadas</h5>
+                    <p class="card-text display-6">{{ summary.createdTasks }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3" *ngIf="summary">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Completadas</h5>
+                    <p class="card-text display-6">{{ summary.completedTasks }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3" *ngIf="summary">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title">% Completado</h5>
+                    <p class="card-text display-6">{{ summary.completionRate }}%</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3" *ngIf="summary">
+            <div class="card text-white bg-secondary">
+                <div class="card-body">
+                    <h5 class="card-title">Última Actividad</h5>
+                    <p class="card-text">{{ summary.lastActivity | date:'shortDate' }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Progreso Semanal</h5>
+                    <canvas baseChart [data]="weeklyChartData" [options]="weeklyChartOptions" [type]="'bar'">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Creadas vs Completadas</h5>
+                    <canvas baseChart [data]="createdVsCompletedChart" [options]="doughnutOptions" [type]="'doughnut'">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
