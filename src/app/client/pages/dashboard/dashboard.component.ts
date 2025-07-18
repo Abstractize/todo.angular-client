@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { TaskListRepository } from '@client/repositories';
-import { TaskList } from '@client/models';
+import { RecommendationsRepository, TaskListRepository } from '@client/repositories';
+import { TaskList, TaskSuggestion } from '@client/models';
 import { ModalService, ToastService } from '@shared/services/';
 import { ConfirmModalComponent } from '@shared/components';
 import { TaskListModalComponent } from '@client/components';
 import { Router } from '@angular/router';
+import { AuthService } from '@auth/services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,19 +16,35 @@ import { Router } from '@angular/router';
 export class DashboardComponent {
   taskList: TaskList[] = [];
 
-  recommendations: TaskList[] = [
-    { id: null, title: 'Sprint Planning', description: 'Plan the upcoming sprint tasks' },
-    { id: null, title: 'Code Review', description: 'Review pull requests and code quality' },
-    { id: null, title: 'Daily Standup', description: 'Discuss daily progress and blockers' }
-  ];
+  recommendations: TaskList[] = [];
 
   constructor(
     private readonly modalService: ModalService,
     private readonly itemListRepository: TaskListRepository,
+    private readonly recommendationsRepository: RecommendationsRepository,
+    private readonly authService: AuthService,
     private readonly router: Router,
     private readonly toast: ToastService
   ) {
     this.loadTaskList();
+
+    this.authService.userId$.subscribe({
+      next: (userId: string) => {
+        if (userId) {
+          this.recommendationsRepository.get(userId).subscribe({
+            next: (suggestions: TaskSuggestion[]) => {
+              this.recommendations = suggestions.sort((a, b) => a.priority - b.priority).map(s => ({
+                id: null,
+                title: s.title,
+                description: s.description
+              }));
+            }
+          });
+        }
+      },
+      error: (error) => this.toast.error(error, 'Failed to load user recommendations.')
+    });
+
   }
 
   private loadTaskList(): void {
