@@ -61,7 +61,7 @@ export class TaskListSettingsModalComponent {
 
     if (confirmed) {
       this.taskListRepository.delete(this.taskList.id!).subscribe(() => {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/analytics']);
         this.close();
       });
     }
