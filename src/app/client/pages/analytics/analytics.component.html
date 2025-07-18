@@ -1,58 +1,26 @@
-<div class="container py-4">
-    <div class="row g-3">
-        <div class="col-md-3" *ngIf="summary">
-            <div class="card text-white bg-primary">
-                <div class="card-body">
-                    <h5 class="card-title">Tareas Creadas</h5>
-                    <p class="card-text display-6">{{ summary.createdTasks }}</p>
-                </div>
-            </div>
+<div class="container py-4" *ngIf="summary && weeklyChartData; else loading">
+    <div class="cards row g-3" *ngIf="summary">
+        <div class="col-md-3">
+            <app-card [title]="'Created Tasks'" [description]="summary.createdTasks.toString()" />
         </div>
-        <div class="col-md-3" *ngIf="summary">
-            <div class="card text-white bg-success">
-                <div class="card-body">
-                    <h5 class="card-title">Completadas</h5>
-                    <p class="card-text display-6">{{ summary.completedTasks }}</p>
-                </div>
-            </div>
+        <div class="col-md-3">
+            <app-card [title]="'Completed Tasks'" [description]="summary.completedTasks.toString()" />
         </div>
-        <div class="col-md-3" *ngIf="summary">
-            <div class="card text-white bg-info">
-                <div class="card-body">
-                    <h5 class="card-title">% Completado</h5>
-                    <p class="card-text display-6">{{ summary.completionRate }}%</p>
-                </div>
-            </div>
+        <div class="col-md-3">
+            <app-card [title]="'Pending Tasks'" [description]="summary.completionRate.toString() + '%'" />
         </div>
-        <div class="col-md-3" *ngIf="summary">
-            <div class="card text-white bg-secondary">
-                <div class="card-body">
-                    <h5 class="card-title">Última Actividad</h5>
-                    <p class="card-text">{{ summary.lastActivity | date:'shortDate' }}</p>
-                </div>
-            </div>
+        <div class="col-md-3">
+            <app-card [title]="'Overdue Tasks'" [description]="(summary.lastActivity | date:'shortDate') ?? 'N/A'" />
         </div>
     </div>
 
-    <div class="row mt-4">
-        <div class="col-lg-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Progreso Semanal</h5>
-                    <canvas baseChart [data]="weeklyChartData" [options]="weeklyChartOptions" [type]="'bar'">
-                    </canvas>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Creadas vs Completadas</h5>
-                    <canvas baseChart [data]="createdVsCompletedChart" [options]="doughnutOptions" [type]="'doughnut'">
-                    </canvas>
-                </div>
-            </div>
-        </div>
+    <div class="col-md-12">
+        <app-bar-chart [data]="weeklyChartData" />
     </div>
 </div>
+
+<ng-template #loading>
+    <div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
+        <div class="spinner-border" role="status"></div>
+    </div>
+</ng-template>

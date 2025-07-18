@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router';
 import { routes } from './client.routes';
 import { EditTaskModalComponent, TaskListModalComponent, TaskListSettingsModalComponent } from './components/';
 import { AnalyticsComponent, DashboardComponent, TaskListDetailComponent } from './pages';
-import { BaseChartDirective } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -17,7 +16,6 @@ import { BaseChartDirective } from 'ng2-charts';
     TaskListSettingsModalComponent
   ],
   imports: [
-    BaseChartDirective,
     SharedModule,
     RouterModule.forChild(routes)
   ]
