@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { AuthService } from '@auth/services';
 import { AnalyticsSummary, WeeklyAnalytics } from '@client/models';
 import { AnalyticsRepository } from '@client/repositories';
 
@@ -20,23 +19,22 @@ export class AnalyticsComponent {
   };
 
   constructor(
-    private readonly authService: AuthService,
     private readonly analyticsRepository: AnalyticsRepository
   ) {
-    this.authService.userId$.subscribe(userId => {
-      this.analyticsRepository.getSummary(userId).subscribe({
-        next: (data: AnalyticsSummary) => {
-          this.summary = data;
-        },
-        error: (error) => console.error('Failed to load analytics summary', error)
-      });
 
-      this.loadWeeklyStats(userId, this.weekStart);
+    this.analyticsRepository.getSummary().subscribe({
+      next: (data: AnalyticsSummary) => {
+        this.summary = data;
+      },
+      error: (error) => console.error('Failed to load analytics summary', error)
     });
+
+    this.loadWeeklyStats(new Date());
   }
 
-  private loadWeeklyStats(userId: string, weekStart: Date): void {
-    this.analyticsRepository.getWeekly(userId, weekStart).subscribe({
+  private loadWeeklyStats(today: Date): void {
+
+    this.analyticsRepository.getWeekly(today).subscribe({
       next: (data: WeeklyAnalytics) => {
         this.weeklyStats = data;
         this.setupWeeklyChart(data);
@@ -45,18 +43,8 @@ export class AnalyticsComponent {
     });
   }
 
-  private get weekStart(): Date {
-    const now = new Date();
-    const day = now.getUTCDay();
-    const diff = now.getUTCDate() - day + (day === 0 ? -6 : 1);
-    return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), diff));
-  }
-
   private setupWeeklyChart(data: WeeklyAnalytics): void {
-    const labels = data.dailyStats.map(d => {
-      const date = new Date(d.date);
-      return date.toLocaleDateString(undefined, { weekday: 'long' });
-    });
+    const labels = data.dailyStats.map(d => d.dayOfWeek);
     const createdData = data.dailyStats.map(d => d.created);
     const completedData = data.dailyStats.map(d => d.completed);
 

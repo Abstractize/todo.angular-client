@@ -1,6 +1,6 @@
 
 export interface DailyStat {
-    date: string;
+    dayOfWeek: string;
     created: number;
     completed: number;
 }
