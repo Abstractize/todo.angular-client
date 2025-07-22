@@ -9,11 +9,8 @@ import { Observable } from 'rxjs';
 export class RecommendationsRepository {
     constructor(private readonly httpClient: HttpClient) { }
 
-    public get(userId: string): Observable<TaskSuggestion[]> {
-        let params: Record<string, string> = {
-            userId: userId
-        }
-        return this.httpClient.get<TaskSuggestion[]>(`/api/recommendations/suggestions`, { params });
+    public get(): Observable<TaskSuggestion[]> {
+        return this.httpClient.get<TaskSuggestion[]>(`/api/recommendations/suggestions`);
     }
 }
 

@@ -5,7 +5,6 @@ import { ModalService, ToastService } from '@shared/services/';
 import { ConfirmModalComponent } from '@shared/components';
 import { TaskListModalComponent } from '@client/components';
 import { Router } from '@angular/router';
-import { AuthService } from '@auth/services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,29 +21,20 @@ export class DashboardComponent {
     private readonly modalService: ModalService,
     private readonly itemListRepository: TaskListRepository,
     private readonly recommendationsRepository: RecommendationsRepository,
-    private readonly authService: AuthService,
     private readonly router: Router,
     private readonly toast: ToastService
   ) {
     this.loadTaskList();
 
-    this.authService.userId$.subscribe({
-      next: (userId: string) => {
-        if (userId) {
-          this.recommendationsRepository.get(userId).subscribe({
-            next: (suggestions: TaskSuggestion[]) => {
-              this.recommendations = suggestions.sort((a, b) => a.priority - b.priority).map(s => ({
-                id: null,
-                title: s.title,
-                description: s.description
-              }));
-            }
-          });
-        }
-      },
-      error: (error) => this.toast.error(error, 'Failed to load user recommendations.')
+    this.recommendationsRepository.get().subscribe({
+      next: (suggestions: TaskSuggestion[]) => {
+        this.recommendations = suggestions.sort((a, b) => a.priority - b.priority).map(s => ({
+          id: null,
+          title: s.title,
+          description: s.description
+        }));
+      }
     });
-
   }
 
   private loadTaskList(): void {
