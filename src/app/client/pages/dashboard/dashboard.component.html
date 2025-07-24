@@ -48,8 +48,19 @@
         <div class="row row-cols-1 row-cols-md-3 g-3">
             <div class="col" *ngFor="let rec of recommendations">
                 <div class="card h-100" (click)="addRecommendedList(rec)">
+
                     <div class="card-body">
-                        <h6 class="card-title mb-1">{{ rec.title }}</h6>
+                        <div class="row">
+                            <h6 class="card-title mb-1 col-md-8">{{ rec.title }}</h6>
+                            <div class="col-md-4 d-flex justify-content-end">
+                                <button class="btn btn-sm btn-outline-danger ms-auto"
+                                    (click)="removeRecommendation(rec)">
+                                    <i class="bi bi-x"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+
+
                         <p class="card-text text-muted mb-0">{{ rec.description }}</p>
                     </div>
                 </div>
