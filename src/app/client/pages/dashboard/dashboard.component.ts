@@ -25,11 +25,14 @@ export class DashboardComponent {
     private readonly toast: ToastService
   ) {
     this.loadTaskList();
+    this.loadRecommendations();
+  }
 
+  private loadRecommendations(): void {
     this.recommendationsRepository.get().subscribe({
       next: (suggestions: TaskSuggestion[]) => {
         this.recommendations = suggestions.sort((a, b) => a.priority - b.priority).map(s => ({
-          id: null,
+          id: s.id,
           title: s.title,
           description: s.description
         }));
@@ -119,12 +122,28 @@ export class DashboardComponent {
   addRecommendedList(rec: TaskList): void {
     const exists = this.taskList.some(t => t.title === rec.title);
     if (!exists) {
+
       this.itemListRepository.add(rec).subscribe({
         next: () => {
-          this.loadTaskList();
+          this.recommendationsRepository.patch(rec.id!, true).subscribe({
+            next: () => {
+              this.loadTaskList();
+              this.loadRecommendations();
+            },
+            error: (error) => this.toast.error(error, 'Failed to mark recommendation as used.')
+          });
         },
         error: (error) => this.toast.error(error, 'Failed to add new task list.')
       });
     }
+  }
+
+  removeRecommendation(rec: TaskList): void {
+    this.recommendationsRepository.patch(rec.id!, false).subscribe({
+      next: () => {
+        this.loadRecommendations();
+      },
+      error: (error) => this.toast.error(error, 'Failed to remove recommendation.')
+    });
   }
 }

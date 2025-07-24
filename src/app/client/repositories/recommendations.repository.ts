@@ -12,6 +12,10 @@ export class RecommendationsRepository {
     public get(): Observable<TaskSuggestion[]> {
         return this.httpClient.get<TaskSuggestion[]>(`/api/recommendations/suggestions`);
     }
+
+    public patch(id: string, used: boolean = true): Observable<void> {
+        return this.httpClient.patch<void>(`/api/recommendations/suggestions/${id}/use`, { used: used });
+    }
 }
 
 
